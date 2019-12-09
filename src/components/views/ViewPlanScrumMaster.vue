@@ -15,7 +15,7 @@
               <div class="col-md-3">
                   <ScrumMasterPanel />
               </div>
-              {{this.sprint}}
+              <!-- {{this.sprint}} -->
           </div>
       </div>
   </div>
