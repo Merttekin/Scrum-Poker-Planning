@@ -9,7 +9,7 @@
               </div>
 
               <div class="col-md-3">
-                  <ActiveStory />
+                  <ActiveStory :isDeveloper="false" />
               </div>
 
               <div class="col-md-3">
@@ -29,6 +29,8 @@ import StoryList from '../story/StoryList.vue';
 import ActiveStory from '../story/ActiveStory.vue';
 import ScrumMasterPanel from '../scrumMaster/ScrumMasterPanel.vue';
 
+import { getSprint } from '../../services/service';
+
 export default {
   components: {
       Header,
@@ -40,6 +42,19 @@ export default {
       ...mapState({
           sprint: state => state.sprint
       })
+  },
+  beforeMount() {
+    const { story } = this.$route.query;
+    if (story) {
+      if (!this.sprint.sessionName) {
+        getSprint(story).then(res => {
+          res.storyList = [res.storyList];
+          res.activeStory = res.storyList[0][0];
+
+          this.$store.dispatch('setSprintData', res);
+        });
+      }
+    }
   }
 }
 </script>

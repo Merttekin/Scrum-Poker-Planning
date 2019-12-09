@@ -37,6 +37,8 @@
 
 <script>
 import { mapState } from 'vuex';
+import { updateStoryList } from '../../services/service';
+import { STORY_LIST_PASSIVE_STATUS } from '../../constants/constants';
 
 import Button from '../common/Button.vue';
 
@@ -46,11 +48,20 @@ export default {
   },
   methods: {
     EndOfStory() {
-      alert('as');
+      const { story } = this.$route.query;
+
+      this.storyList.map(story => {
+        if (story.storyName === this.activeStory.storyName) {
+          story.status = STORY_LIST_PASSIVE_STATUS;
+        }
+        return story;
+      });
+      updateStoryList(story, this.storyList);
     }
   },
   computed: {
     ...mapState({
+      storyList: state => state.sprint.storyList[0],
       voters: state => state.sprint.storyList[0][0].voters,
       activeStory: state => state.sprint.activeStory,
       selectedPoint: state => state.sprint.selectedPoint

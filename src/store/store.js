@@ -2,7 +2,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import service from '../services/service';
+// import service from '../services/service';
 
 Vue.use(Vuex);
 
@@ -28,10 +28,10 @@ export const store = new Vuex.Store({
         }
     },
     actions: {
-        fetchSprintData(context) {
-            return service.fetchSprint()
-                .then(sprint => context.commit('setSprintData', sprint));
-        },
+        // fetchSprintData(context) {
+        //     return service.fetchSprint()
+        //         .then(sprint => context.commit('setSprintData', sprint));
+        // },
         setSprintData(context, data) {
             // service.setSprintData(data);
             context.commit('setSprintData', data);

@@ -68,6 +68,10 @@ import {
   maxLength
 } from 'vuelidate/lib/validators';
 
+import { createSprint } from '../../services/service';
+import { STORY_LIST_ACTIVE_STATUS, STORY_LIST_NOT_VOTED_STATUS } from '../../constants/constants';
+import { POKER_PLANNING_AS_SCRUM_MASTER } from '../../constants/routeConstants';
+
 import Header from '../common/Header.vue';
 import Button from '../common/Button.vue';
 
@@ -98,25 +102,27 @@ export default {
       let storyLists = storyNames.map(story => {
         return {
           storyName: story,
-          status: "Not Voted",
+          status: STORY_LIST_NOT_VOTED_STATUS,
           storyPoint: null,
           voters: votersArr
         };
       });
       this.activeStory = storyLists[0];
-      this.activeStory.status = 'Active';
+      this.activeStory.status = STORY_LIST_ACTIVE_STATUS;
       this.sprint.storyList.push(storyLists);
 
       this.$store.dispatch('setSprintData', this.sprint);
       this.$store.dispatch('setActiveStory', this.activeStory);
-      this.$router.push('poker-planning-as-scrum-master');
+      createSprint(this.sprint).then(key => {
+        this.$router.push({ path: POKER_PLANNING_AS_SCRUM_MASTER, query: { story: key }});
+      });
     },
     getVoters() {
       let voters = [];
       for (let i = 1; i <= this.sprint.numberOfVoters; i++) {
         let voter = {
           voterName: `Voter ${i}`,
-          isVoted: 'Not Voted'
+          isVoted: STORY_LIST_NOT_VOTED_STATUS
         };
         voters.push(voter);
       }
@@ -129,8 +135,7 @@ export default {
         sessionName: '',
         numberOfVoters: null,
         storyList: [],
-        activeStory: {},
-        selectedPoint: 0
+        activeStory: {}
       }
     };
   },
